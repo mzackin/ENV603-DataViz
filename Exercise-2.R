@@ -6,7 +6,7 @@ ggplot(data = organdata,
        mapping = aes(x = year, y = donors)) + 
   geom_point()
 
-# What does the error message mean here? --> (comment your answer)
+# What does the error message mean here? --> This means there are 34 rows of data that fall outside the specified axis ranges of the plot
 
 # Now let's use geom_line() to plot each country's time series
 ggplot(data = organdata,
@@ -17,7 +17,8 @@ ggplot(data = organdata,
 # Leaving the timeseries aside, we can also look at the number of donors by country:
 ggplot(data = organdata,
        mapping = aes(x = country, y = donors)) + 
-  geom_boxplot()
+  geom_boxplot() +
+  coord_flip()
 
 # This doesn't look great... try adding coord_flip() to the code above.
 
@@ -43,7 +44,8 @@ ggplot(data = organdata,
   geom_point() + 
   labs(x=NULL) + 
   coord_flip() + 
-  theme(legend.position = "top")
+  theme(legend.position = "top") +
+  geom_jitter()
 
 # But these points have some overlapping observations... Try adding geom_jitter() to the plot above. If you don't like the default arguments of geom_jitter, look up at documentation for geom_jitter (https://ggplot2.tidyverse.org/reference/geom_jitter.html) and add additional arguments.
 
@@ -54,7 +56,7 @@ by_country <- organdata %>% group_by(consent_law, country) %>%
 
 by_country
 
-# What happened inside this pipeline? --> (comment your answer here)
+# What happened inside this pipeline? --> The 'funs()' command is no longer recommended within the dplyr package, so R is recommending three alternative workarounds.
 
 # Now for the Cleveland dot plot:
 ggplot(data = by_country,
@@ -62,8 +64,11 @@ ggplot(data = by_country,
                      color = consent_law)) + 
   geom_point(size=3) +
   labs(x = "Donor Procurement Rate",
-       y = "", color = "Consent Law") +
-  theme(legend.position="top")
+       y = "", color = "Consent Law",
+       title = "Inertia reigns: 'Opt-out' laws lead to more organ donors") +
+  theme(legend.position="top") +
+  facet_wrap(~ consent_law) +
+  theme_classic()
 
 # Try adding a facet_wrap() by consent law to the plot above. Facet_wrap has additional arguments that you could explore, including scales =, and ncol=. Again, Google is your friend here.
 
